@@ -17,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -44,7 +45,8 @@ public class GDQuanLyPhong extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GDQuanLyPhong window = new GDQuanLyPhong();
+					String tenTK = "abc";
+					GDQuanLyPhong window = new GDQuanLyPhong(tenTK);
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -56,7 +58,7 @@ public class GDQuanLyPhong extends JFrame{
 	/**
 	 * Create the application.
 	 */
-	public GDQuanLyPhong() {
+	public GDQuanLyPhong(String tenTK) {
 		setBounds(100, 100, 1380, 755);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Chương trình quản lý thông tin thuê phòng khách sạn Tâm Bình");
@@ -72,7 +74,7 @@ public class GDQuanLyPhong extends JFrame{
 		mnQLTP.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDQuanLyThuePhong().setVisible(true);
+				new GDQuanLyThuePhong(tenTK).setVisible(true);
 				dispose();
 			}
 		});
@@ -92,7 +94,7 @@ public class GDQuanLyPhong extends JFrame{
 		mnQLP.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDQuanLyPhong().setVisible(true);
+				new GDQuanLyPhong(tenTK).setVisible(true);
 				dispose();
 			}
 		});
@@ -117,7 +119,7 @@ public class GDQuanLyPhong extends JFrame{
 		mnQLKH.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDQuanLyNhanVien().setVisible(true);
+				new GDQuanLyNhanVien(tenTK).setVisible(true);
 				dispose();
 			}
 		});
@@ -130,7 +132,7 @@ public class GDQuanLyPhong extends JFrame{
 		mnQLNV.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDQuanLyNhanVien().setVisible(true);
+				new GDQuanLyNhanVien(tenTK).setVisible(true);
 				dispose();
 			}
 		});
@@ -143,7 +145,7 @@ public class GDQuanLyPhong extends JFrame{
 		mnThongKe.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDThongKe().setVisible(true);
+				new GDThongKe(tenTK).setVisible(true);
 				dispose();
 			}
 		});
@@ -151,6 +153,34 @@ public class GDQuanLyPhong extends JFrame{
 		Image imgThongKe = new ImageIcon(this.getClass().getResource("/img/thongke.png")).getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
 		mnThongKe.setIcon(new ImageIcon(imgThongKe));
 		mnChucNang.add(mnThongKe);
+		
+		JLabel lblDangXuat = new JLabel("Đăng xuất");
+		lblDangXuat.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int thoat;
+				thoat = JOptionPane.showConfirmDialog(null, "Bạn có muốn đăng xuất?", "Nhắc nhở", JOptionPane.YES_NO_OPTION);
+				if(thoat == JOptionPane.YES_OPTION) {
+					new GDDangNhap().setVisible(true);
+					dispose();
+				}
+			}
+		});
+		JLabel lblNewLabel = new JLabel("  |   ");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		mnChucNang.add(lblNewLabel);
+		
+		JLabel lblTenTaiKhoan = new JLabel("New label");
+		lblTenTaiKhoan.setForeground(Color.RED);
+		lblTenTaiKhoan.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblTenTaiKhoan.setText(tenTK);
+		mnChucNang.add(lblTenTaiKhoan);
+		
+		JLabel lblNewLabel_1 = new JLabel("     ");
+		mnChucNang.add(lblNewLabel_1);
+		lblDangXuat.setForeground(Color.BLUE);
+		lblDangXuat.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 14));
+		mnChucNang.add(lblDangXuat);
 		
 		JPanel pnBang = new JPanel();
 		pnBang.setBackground(Color.WHITE);
@@ -220,30 +250,31 @@ public class GDQuanLyPhong extends JFrame{
 		GroupLayout gl_pnLocPhong = new GroupLayout(pnLocPhong);
 		gl_pnLocPhong.setHorizontalGroup(
 			gl_pnLocPhong.createParallelGroup(Alignment.TRAILING)
-				.addComponent(pnTieuDeLocPhong, GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
+				.addComponent(pnTieuDeLocPhong, GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
 				.addGroup(gl_pnLocPhong.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_pnLocPhong.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblLocLoaiPhong, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblLocSoPhong, GroupLayout.PREFERRED_SIZE, 72, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_pnLocPhong.createParallelGroup(Alignment.TRAILING)
-						.addComponent(cboLocSoPhong, 0, 253, Short.MAX_VALUE)
-						.addComponent(cboLocLoaiPhong, 0, 253, Short.MAX_VALUE))
-					.addGap(20))
-				.addGroup(gl_pnLocPhong.createSequentialGroup()
+						.addComponent(lblLocSoPhong)
+						.addComponent(lblLocLoaiPhong, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(gl_pnLocPhong.createParallelGroup(Alignment.LEADING)
+						.addComponent(cboLocLoaiPhong, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+						.addComponent(cboLocSoPhong, 0, 254, Short.MAX_VALUE))
+					.addContainerGap())
+				.addGroup(Alignment.LEADING, gl_pnLocPhong.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_pnLocPhong.createParallelGroup(Alignment.TRAILING)
-						.addComponent(btnLoc, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_pnLocPhong.createSequentialGroup()
-							.addGroup(gl_pnLocPhong.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblLocSoNguoiO, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblLocSoGiuong, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(gl_pnLocPhong.createParallelGroup(Alignment.LEADING)
-								.addComponent(cboLocSoNguoiO, 0, 250, Short.MAX_VALUE)
-								.addComponent(cboLocSoGiuong, 0, 250, Short.MAX_VALUE))))
-					.addGap(20))
+					.addGroup(gl_pnLocPhong.createParallelGroup(Alignment.LEADING)
+						.addComponent(lblLocSoNguoiO, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblLocSoGiuong, GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(gl_pnLocPhong.createParallelGroup(Alignment.LEADING)
+						.addComponent(cboLocSoNguoiO, 0, 254, Short.MAX_VALUE)
+						.addComponent(cboLocSoGiuong, 0, 254, Short.MAX_VALUE))
+					.addContainerGap())
+				.addGroup(Alignment.LEADING, gl_pnLocPhong.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(btnLoc, GroupLayout.DEFAULT_SIZE, 366, Short.MAX_VALUE)
+					.addContainerGap())
 		);
 		gl_pnLocPhong.setVerticalGroup(
 			gl_pnLocPhong.createParallelGroup(Alignment.LEADING)
@@ -255,8 +286,8 @@ public class GDQuanLyPhong extends JFrame{
 						.addComponent(cboLocSoPhong, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addGroup(gl_pnLocPhong.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblLocLoaiPhong, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-						.addComponent(cboLocLoaiPhong, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(cboLocLoaiPhong, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblLocLoaiPhong, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addGroup(gl_pnLocPhong.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblLocSoGiuong, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
@@ -265,9 +296,9 @@ public class GDQuanLyPhong extends JFrame{
 					.addGroup(gl_pnLocPhong.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblLocSoNguoiO, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
 						.addComponent(cboLocSoNguoiO, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
+					.addPreferredGap(ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
 					.addComponent(btnLoc, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(71, Short.MAX_VALUE))
+					.addContainerGap())
 		);
 		pnTieuDeLocPhong.setLayout(new BorderLayout(0, 0));
 		

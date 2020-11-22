@@ -1,7 +1,7 @@
 package entity;
 
 public class TaiKhoan {
-	private String taiKhoan = "admin123";
+	private String taiKhoan = "admin";
 	private String matKhau = "admin";		
 	
 	public TaiKhoan() {

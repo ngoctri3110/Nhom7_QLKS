@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 
 public class GDChinh extends JFrame{
@@ -23,8 +24,7 @@ public class GDChinh extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GDChinh window = new GDChinh();
-					window.setVisible(true);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -34,7 +34,7 @@ public class GDChinh extends JFrame{
 	
 	
 	
-	public GDChinh() {
+	public GDChinh(String tenTK) {
 		setBounds(100, 100, 450, 300);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Chương trình quản lý thông tin thuê phòng khách sạn Tâm Bình");
@@ -51,7 +51,7 @@ public class GDChinh extends JFrame{
 		mnQLTP.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDQuanLyThuePhong().setVisible(true);
+				new GDQuanLyThuePhong(tenTK).setVisible(true);
 				dispose();
 			}
 		});
@@ -70,7 +70,7 @@ public class GDChinh extends JFrame{
 		mnQLP.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDQuanLyPhong().setVisible(true);
+				new GDQuanLyPhong(tenTK).setVisible(true);
 				dispose();
 			}
 		});
@@ -95,7 +95,7 @@ public class GDChinh extends JFrame{
 		mnQLKH.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDQuanLyNhanVien().setVisible(true);
+				new GDQuanLyKhachHang(tenTK).setVisible(true);
 				dispose();
 			}
 		});
@@ -108,7 +108,7 @@ public class GDChinh extends JFrame{
 		mnQLNV.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDQuanLyNhanVien().setVisible(true);
+				new GDQuanLyNhanVien(tenTK).setVisible(true);
 				dispose();
 			}
 		});
@@ -121,7 +121,7 @@ public class GDChinh extends JFrame{
 		mnThongKe.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDThongKe().setVisible(true);
+				new GDThongKe(tenTK).setVisible(true);
 				dispose();
 			}
 		});
@@ -130,28 +130,38 @@ public class GDChinh extends JFrame{
 		mnThongKe.setIcon(new ImageIcon(imgThongKe));
 		mnChucNang.add(mnThongKe);
 		
-		JLabel lblEmpTy = new JLabel("                      ");
-		mnChucNang.add(lblEmpTy);
-		
 		JLabel lblDangXuat = new JLabel("Đăng xuất");
 		lblDangXuat.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDDangNhap().setVisible(true);
-				dispose();
+				int thoat;
+				thoat = JOptionPane.showConfirmDialog(null, "Bạn có muốn đăng xuất không?", "Nhắc nhở", JOptionPane.YES_NO_OPTION);
+				if(thoat == JOptionPane.YES_OPTION) {
+					new GDDangNhap().setVisible(true);
+					dispose();
+				}
 			}
 		});
+		
+		JLabel lblNewLabel = new JLabel("  |   ");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		mnChucNang.add(lblNewLabel);
+		
+		JLabel lblTenTaiKhoan = new JLabel("New label");
+		lblTenTaiKhoan.setForeground(Color.RED);
+		lblTenTaiKhoan.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblTenTaiKhoan.setText(tenTK);
+		mnChucNang.add(lblTenTaiKhoan);
+		
+		JLabel lblNewLabel_1 = new JLabel("     ");
+		mnChucNang.add(lblNewLabel_1);
 		lblDangXuat.setForeground(Color.BLUE);
 		lblDangXuat.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 14));
 		mnChucNang.add(lblDangXuat);
 		
-		JLabel lblEmpTy1 = new JLabel("   ");
-		mnChucNang.add(lblEmpTy1);
-		
-		JLabel lblTenTaiKhoan = new JLabel();
-		lblTenTaiKhoan.setText("");
-		lblTenTaiKhoan.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		mnChucNang.add(lblTenTaiKhoan);
+//		if(tenTK.equalsIgnoreCase("admin")) {
+//		lblTenTaiKhoan.setText("TânCu");
+//	}
 		
 		JLabel lblTieuDe = new JLabel("Bấm vào các chức năng trên để thực hiện công việc");
 		lblTieuDe.setFont(new Font("Tahoma", Font.ITALIC, 18));

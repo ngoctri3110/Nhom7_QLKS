@@ -164,7 +164,7 @@ public class GDDangNhap extends JFrame{
 						txtTaiKhoan.requestFocus();
 					}
 					else {
-						new GDChinh().setVisible(true);
+						new GDChinh(txtTaiKhoan.getText()).setVisible(true);
 						dispose();
 					}			
 				}

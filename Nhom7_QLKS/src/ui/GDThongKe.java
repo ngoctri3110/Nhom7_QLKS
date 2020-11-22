@@ -10,8 +10,10 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import org.jfree.chart.ChartFactory;
@@ -68,7 +70,8 @@ public class GDThongKe extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GDThongKe window = new GDThongKe();
+					String tenTK = "abc";
+					GDThongKe window = new GDThongKe(tenTK);
 					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -80,7 +83,7 @@ public class GDThongKe extends JFrame{
 	/**
 	 * Create the application.
 	 */
-	public GDThongKe() {
+	public GDThongKe(String tenTK) {
 
         JFreeChart pieChart = createCircleChart(createCircleDataset());
         ChartPanel chartCirclePanel = new ChartPanel(pieChart);
@@ -125,7 +128,7 @@ public class GDThongKe extends JFrame{
 		mnQLTP.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDQuanLyThuePhong().setVisible(true);
+				new GDQuanLyThuePhong(tenTK).setVisible(true);
 				dispose();
 			}
 		});
@@ -144,7 +147,7 @@ public class GDThongKe extends JFrame{
 		mnQLP.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDQuanLyPhong().setVisible(true);
+				new GDQuanLyPhong(tenTK).setVisible(true);
 				dispose();
 			}
 		});
@@ -169,7 +172,7 @@ public class GDThongKe extends JFrame{
 		mnQLKH.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDQuanLyNhanVien().setVisible(true);
+				new GDQuanLyKhachHang(tenTK).setVisible(true);
 				dispose();
 			}
 		});
@@ -182,7 +185,7 @@ public class GDThongKe extends JFrame{
 		mnQLNV.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDQuanLyNhanVien().setVisible(true);
+				new GDQuanLyNhanVien(tenTK).setVisible(true);
 				dispose();
 			}
 		});
@@ -195,7 +198,7 @@ public class GDThongKe extends JFrame{
 		mnThongKe.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDThongKe().setVisible(true);
+				new GDThongKe(tenTK).setVisible(true);
 				dispose();
 			}
 		});
@@ -203,5 +206,33 @@ public class GDThongKe extends JFrame{
 		Image imgThongKe = new ImageIcon(this.getClass().getResource("/img/thongke.png")).getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
 		mnThongKe.setIcon(new ImageIcon(imgThongKe));
 		mnChucNang.add(mnThongKe);
+		
+		JLabel lblDangXuat = new JLabel("Đăng xuất");
+		lblDangXuat.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int thoat;
+				thoat = JOptionPane.showConfirmDialog(null, "Bạn có muốn đăng xuất?", "Nhắc nhở", JOptionPane.YES_NO_OPTION);
+				if(thoat == JOptionPane.YES_OPTION) {
+					new GDDangNhap().setVisible(true);
+					dispose();
+				}
+			}
+		});
+		JLabel lblNewLabel = new JLabel("  |   ");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		mnChucNang.add(lblNewLabel);
+		
+		JLabel lblTenTaiKhoan = new JLabel("New label");
+		lblTenTaiKhoan.setForeground(Color.RED);
+		lblTenTaiKhoan.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblTenTaiKhoan.setText(tenTK);
+		mnChucNang.add(lblTenTaiKhoan);
+		
+		JLabel lblNewLabel_1 = new JLabel("     ");
+		mnChucNang.add(lblNewLabel_1);
+		lblDangXuat.setForeground(Color.BLUE);
+		lblDangXuat.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 14));
+		mnChucNang.add(lblDangXuat);
 	}
 }

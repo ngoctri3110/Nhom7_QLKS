@@ -1,51 +1,39 @@
 package ui;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.SystemColor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRootPane;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.GroupLayout;
-import javax.swing.ImageIcon;
-import javax.swing.GroupLayout.Alignment;
-import java.awt.BorderLayout;
-import java.awt.Color;
-
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 
-import entity.TaiKhoan;
-import javax.swing.JRadioButton;
-import com.toedter.components.JSpinField;
-import com.toedter.calendar.JMonthChooser;
-import com.toedter.calendar.JYearChooser;
-
 public class GDTaoTaiKhoan extends JFrame{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3907854565196885940L;
 	private JTextField txtMatKhau;
 	private JPanel pnHinhNen;
 	private JLabel lblHoTen;
 	private JLabel lblMatKhau;
 	private JLabel lblSĐT;
 	private JTextField txtSĐT;
-	private JRadioButton rdbtnNu;
-	private JRadioButton rdbtnNam;
-	private JLabel lblNgaySinh;
 	private JTextField txtKstambinh;
-	private JTextField txtDiaChi;
 	private JLabel lblHinhTaoTaiKhoan;
 	private JTextField txtHoTen;
 
@@ -77,7 +65,7 @@ public class GDTaoTaiKhoan extends JFrame{
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		setBounds(100, 100, 588, 704);
+		setBounds(100, 100, 588, 500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setUndecorated(true); 
 		getRootPane().setWindowDecorationStyle(JRootPane.NONE);
@@ -133,37 +121,6 @@ public class GDTaoTaiKhoan extends JFrame{
 		txtSĐT.setBackground(new Color(255, 255, 255));
 		txtSĐT.setColumns(10);
 		
-		JRadioButton rdbtnNu = new JRadioButton("Nữ");
-		rdbtnNu.setForeground(new Color(0, 0, 0));
-		rdbtnNu.setBackground(new Color(255, 192, 203));
-		rdbtnNu.setFont(new Font("Tahoma", Font.BOLD, 20));
-		
-		rdbtnNu.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(rdbtnNu.isSelected())
-					rdbtnNam.setSelected(false);
-			}
-		});
-		
-		JRadioButton rdbtnNam = new JRadioButton("Nam");
-		rdbtnNam.setForeground(new Color(0, 0, 0));
-		rdbtnNam.setBackground(new Color(255, 192, 203));
-		rdbtnNam.setFont(new Font("Tahoma", Font.BOLD, 20));
-		
-		rdbtnNam.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(rdbtnNam.isSelected())
-					rdbtnNu.setSelected(false);
-			}
-		});
-		
-		lblNgaySinh = new JLabel("Ngày sinh");
-		lblNgaySinh.setForeground(new Color(0, 0, 0));
-		lblNgaySinh.setFont(new Font("Tahoma", Font.BOLD, 20));
-		
-		JSpinField spinField = new JSpinField();
-		spinField.getSpinner().setFont(new Font("Tahoma", Font.BOLD, 15));
-		
 		JLabel lblTenDangNhap = new JLabel("Tên đăng nhập");
 		lblTenDangNhap.setForeground(Color.BLACK);
 		lblTenDangNhap.setFont(new Font("Tahoma", Font.BOLD, 20));
@@ -174,21 +131,6 @@ public class GDTaoTaiKhoan extends JFrame{
 		txtKstambinh.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		txtKstambinh.setColumns(10);
 		txtKstambinh.setBackground(Color.WHITE);
-		
-		JLabel lblDiaChi = new JLabel("Địa chỉ");
-		lblDiaChi.setForeground(Color.BLACK);
-		lblDiaChi.setFont(new Font("Tahoma", Font.BOLD, 20));
-		
-		txtDiaChi = new JTextField();
-		txtDiaChi.setText("E1/56 Gò Vấp, TP.Hồ Chí Minh");
-		txtDiaChi.setForeground(Color.BLACK);
-		txtDiaChi.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		txtDiaChi.setColumns(10);
-		txtDiaChi.setBackground(Color.WHITE);
-		
-		JLabel lblGioiTinh = new JLabel("Giới tính :");
-		lblGioiTinh.setForeground(Color.BLACK);
-		lblGioiTinh.setFont(new Font("Tahoma", Font.BOLD, 20));
 		
 		JButton btnTroVe = new JButton("Trở về");
 		btnTroVe.setForeground(Color.BLACK);
@@ -205,23 +147,18 @@ public class GDTaoTaiKhoan extends JFrame{
 		GroupLayout gl_pnHinhNen = new GroupLayout(pnHinhNen);
 		gl_pnHinhNen.setHorizontalGroup(
 			gl_pnHinhNen.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_pnHinhNen.createSequentialGroup()
-					.addComponent(pnTaoTaiKhoan, GroupLayout.PREFERRED_SIZE, 588, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(20, Short.MAX_VALUE))
+				.addComponent(pnTaoTaiKhoan, GroupLayout.DEFAULT_SIZE, 588, Short.MAX_VALUE)
 		);
 		gl_pnHinhNen.setVerticalGroup(
 			gl_pnHinhNen.createParallelGroup(Alignment.LEADING)
-				.addComponent(pnTaoTaiKhoan, GroupLayout.DEFAULT_SIZE, 704, Short.MAX_VALUE)
+				.addComponent(pnTaoTaiKhoan, GroupLayout.PREFERRED_SIZE, 500, Short.MAX_VALUE)
 		);
 		
 		Image imgTaoTaiKhoan = new ImageIcon(this.getClass().getResource("/img/taotaikhoan.png")).getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
 		lblHinhTaoTaiKhoan = new JLabel("");
+		lblHinhTaoTaiKhoan.setHorizontalAlignment(SwingConstants.CENTER);
 		lblHinhTaoTaiKhoan.setBackground(new Color(255, 192, 203));
 		lblHinhTaoTaiKhoan.setIcon(new ImageIcon(imgTaoTaiKhoan));
-		
-		JYearChooser yearChooser = new JYearChooser();
-		
-		JMonthChooser monthChooser = new JMonthChooser();
 		
 		txtHoTen = new JTextField();
 		txtHoTen.setText("Nguyễn Văn Anh");
@@ -231,65 +168,45 @@ public class GDTaoTaiKhoan extends JFrame{
 		txtHoTen.setBackground(Color.WHITE);
 		GroupLayout gl_pnTaoTaiKhoan = new GroupLayout(pnTaoTaiKhoan);
 		gl_pnTaoTaiKhoan.setHorizontalGroup(
-			gl_pnTaoTaiKhoan.createParallelGroup(Alignment.LEADING)
+			gl_pnTaoTaiKhoan.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_pnTaoTaiKhoan.createSequentialGroup()
-					.addGap(36)
-					.addComponent(lblTaoTaiKhoan, GroupLayout.PREFERRED_SIZE, 532, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_pnTaoTaiKhoan.createSequentialGroup()
-					.addGap(23)
-					.addComponent(lblHoTen, GroupLayout.PREFERRED_SIZE, 274, GroupLayout.PREFERRED_SIZE)
-					.addGap(230))
-				.addGroup(gl_pnTaoTaiKhoan.createSequentialGroup()
-					.addGap(23)
-					.addComponent(txtDiaChi, GroupLayout.PREFERRED_SIZE, 535, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_pnTaoTaiKhoan.createSequentialGroup()
-					.addGap(23)
-					.addComponent(lblNgaySinh, GroupLayout.PREFERRED_SIZE, 165, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_pnTaoTaiKhoan.createSequentialGroup()
-					.addGap(23)
-					.addGroup(gl_pnTaoTaiKhoan.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_pnTaoTaiKhoan.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_pnTaoTaiKhoan.createSequentialGroup()
-							.addComponent(spinField, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
-							.addGap(29)
-							.addComponent(monthChooser, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGap(26)
-							.addComponent(yearChooser, GroupLayout.PREFERRED_SIZE, 69, GroupLayout.PREFERRED_SIZE))
-						.addComponent(lblTenDangNhap, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
-						.addComponent(txtKstambinh, GroupLayout.PREFERRED_SIZE, 274, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblMatKhau, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
-						.addComponent(txtMatKhau, GroupLayout.PREFERRED_SIZE, 274, GroupLayout.PREFERRED_SIZE))
-					.addGap(51)
-					.addComponent(lblHinhTaoTaiKhoan, GroupLayout.PREFERRED_SIZE, 210, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_pnTaoTaiKhoan.createSequentialGroup()
-					.addGap(23)
-					.addComponent(lblGioiTinh, GroupLayout.PREFERRED_SIZE, 102, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addComponent(rdbtnNu)
-					.addGap(18)
-					.addComponent(rdbtnNam))
-				.addGroup(gl_pnTaoTaiKhoan.createSequentialGroup()
-					.addGap(23)
-					.addComponent(btnTroVe, GroupLayout.PREFERRED_SIZE, 175, GroupLayout.PREFERRED_SIZE)
-					.addGap(177)
-					.addComponent(btnDangKy, GroupLayout.PREFERRED_SIZE, 183, GroupLayout.PREFERRED_SIZE))
-				.addGroup(gl_pnTaoTaiKhoan.createSequentialGroup()
-					.addGap(23)
-					.addGroup(gl_pnTaoTaiKhoan.createParallelGroup(Alignment.LEADING)
-						.addComponent(lblDiaChi, GroupLayout.PREFERRED_SIZE, 274, GroupLayout.PREFERRED_SIZE)
-						.addGroup(Alignment.TRAILING, gl_pnTaoTaiKhoan.createSequentialGroup()
-							.addComponent(txtHoTen, GroupLayout.PREFERRED_SIZE, 256, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
+							.addContainerGap()
+							.addComponent(lblTaoTaiKhoan, GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE))
+						.addGroup(gl_pnTaoTaiKhoan.createSequentialGroup()
+							.addGap(23)
 							.addGroup(gl_pnTaoTaiKhoan.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblSĐT, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)
-								.addComponent(txtSĐT, GroupLayout.PREFERRED_SIZE, 261, GroupLayout.PREFERRED_SIZE))))
-					.addContainerGap())
+								.addGroup(gl_pnTaoTaiKhoan.createSequentialGroup()
+									.addGroup(gl_pnTaoTaiKhoan.createParallelGroup(Alignment.LEADING, false)
+										.addComponent(lblTenDangNhap, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblMatKhau, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
+										.addComponent(txtKstambinh)
+										.addComponent(txtHoTen, GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+										.addComponent(btnTroVe, GroupLayout.PREFERRED_SIZE, 175, GroupLayout.PREFERRED_SIZE)
+										.addComponent(txtMatKhau))
+									.addPreferredGap(ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+									.addGroup(gl_pnTaoTaiKhoan.createParallelGroup(Alignment.TRAILING)
+										.addGroup(gl_pnTaoTaiKhoan.createSequentialGroup()
+											.addComponent(lblSĐT, GroupLayout.PREFERRED_SIZE, 220, GroupLayout.PREFERRED_SIZE)
+											.addGap(41))
+										.addGroup(Alignment.LEADING, gl_pnTaoTaiKhoan.createParallelGroup(Alignment.TRAILING, false)
+											.addComponent(lblHinhTaoTaiKhoan, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+											.addComponent(txtSĐT, GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
+											.addGroup(gl_pnTaoTaiKhoan.createSequentialGroup()
+												.addPreferredGap(ComponentPlacement.RELATED)
+												.addComponent(btnDangKy, GroupLayout.PREFERRED_SIZE, 183, GroupLayout.PREFERRED_SIZE)))))
+								.addGroup(gl_pnTaoTaiKhoan.createSequentialGroup()
+									.addComponent(lblHoTen, GroupLayout.PREFERRED_SIZE, 274, GroupLayout.PREFERRED_SIZE)
+									.addGap(258)))))
+					.addGap(16))
 		);
 		gl_pnTaoTaiKhoan.setVerticalGroup(
 			gl_pnTaoTaiKhoan.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_pnTaoTaiKhoan.createSequentialGroup()
-					.addGap(11)
+					.addContainerGap()
 					.addComponent(lblTaoTaiKhoan, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
-					.addGap(11)
+					.addGap(12)
 					.addGroup(gl_pnTaoTaiKhoan.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblHoTen, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblSĐT, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE))
@@ -297,39 +214,24 @@ public class GDTaoTaiKhoan extends JFrame{
 					.addGroup(gl_pnTaoTaiKhoan.createParallelGroup(Alignment.BASELINE)
 						.addComponent(txtHoTen, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE)
 						.addComponent(txtSĐT, GroupLayout.PREFERRED_SIZE, 40, GroupLayout.PREFERRED_SIZE))
-					.addGap(12)
-					.addComponent(lblDiaChi, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
-					.addGap(6)
-					.addComponent(txtDiaChi, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addComponent(lblNgaySinh, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)
-					.addGap(6)
 					.addGroup(gl_pnTaoTaiKhoan.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_pnTaoTaiKhoan.createSequentialGroup()
-							.addGroup(gl_pnTaoTaiKhoan.createParallelGroup(Alignment.LEADING)
-								.addComponent(spinField, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
-								.addComponent(monthChooser, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
-								.addComponent(yearChooser, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
-							.addGap(38)
+							.addGap(18)
 							.addComponent(lblTenDangNhap, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
 							.addGap(18)
 							.addComponent(txtKstambinh, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
 							.addGap(18)
 							.addComponent(lblMatKhau, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
 							.addGap(18)
-							.addComponent(txtMatKhau, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
-						.addComponent(lblHinhTaoTaiKhoan, GroupLayout.PREFERRED_SIZE, 252, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(gl_pnTaoTaiKhoan.createParallelGroup(Alignment.LEADING)
+							.addComponent(txtMatKhau, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+							.addGap(60)
+							.addComponent(btnTroVe, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_pnTaoTaiKhoan.createSequentialGroup()
-							.addGap(2)
-							.addComponent(lblGioiTinh, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
-						.addComponent(rdbtnNu)
-						.addComponent(rdbtnNam, GroupLayout.PREFERRED_SIZE, 32, GroupLayout.PREFERRED_SIZE))
-					.addGap(43)
-					.addGroup(gl_pnTaoTaiKhoan.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnTroVe, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnDangKy, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)))
+							.addGap(6)
+							.addComponent(lblHinhTaoTaiKhoan, GroupLayout.PREFERRED_SIZE, 252, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnDangKy, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)))
+					.addGap(223))
 		);
 		pnTaoTaiKhoan.setLayout(gl_pnTaoTaiKhoan);
 		pnHinhNen.setLayout(gl_pnHinhNen);
