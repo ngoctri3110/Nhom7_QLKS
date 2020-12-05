@@ -26,9 +26,6 @@ import entity.TaiKhoan;
 
 public class GDDangNhap extends JFrame{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JTextField txtTaiKhoan;
 	private JTextField txtMatKhau;
@@ -40,9 +37,6 @@ public class GDDangNhap extends JFrame{
 	private JLabel lblTat;
 	private JLabel lblTaiKhoan;
 
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -56,10 +50,6 @@ public class GDDangNhap extends JFrame{
 		});
 	}
 
-	/**
-	 * Create the application.
-	 * @return 
-	 */
 	public GDDangNhap() {
 		setBounds(100, 100, 1024, 768);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -68,6 +58,8 @@ public class GDDangNhap extends JFrame{
 		getRootPane().setWindowDecorationStyle(JRootPane.NONE);
 		setResizable(false);
 		setLocationRelativeTo(null);
+		Image imgChinh = new ImageIcon(this.getClass().getResource("/img/logo.jpg")).getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+		setIconImage(imgChinh);
 		
 		pnHinhNen = new JPanel();
 		pnHinhNen.setBounds(0, 0, 1024, 768);

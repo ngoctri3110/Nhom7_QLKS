@@ -28,9 +28,6 @@ import javax.swing.table.DefaultTableModel;
 
 public class GDQuanLyPhong extends JFrame{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -1360180292521970427L;
 	private JTable tablePhong;
 	private JTextField txtSoPhong;
@@ -55,9 +52,6 @@ public class GDQuanLyPhong extends JFrame{
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
 	public GDQuanLyPhong(String tenTK) {
 		setBounds(100, 100, 1380, 755);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -65,6 +59,8 @@ public class GDQuanLyPhong extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(MAXIMIZED_BOTH);
 		setLocationRelativeTo(null);
+		Image imgChinh = new ImageIcon(this.getClass().getResource("/img/logo.jpg")).getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+		setIconImage(imgChinh);
 		
 		JMenuBar mnChucNang = new JMenuBar();
 		mnChucNang.setFont(new Font("Segoe UI", Font.BOLD, 20));
@@ -74,7 +70,7 @@ public class GDQuanLyPhong extends JFrame{
 		mnQLTP.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDQuanLyThuePhong(tenTK).setVisible(true);
+				new GDQuanLyThueTraPhong(tenTK).setVisible(true);
 				dispose();
 			}
 		});
@@ -82,12 +78,6 @@ public class GDQuanLyPhong extends JFrame{
 		Image imgQLTP = new ImageIcon(this.getClass().getResource("/img/qltp.png")).getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
 		mnQLTP.setIcon(new ImageIcon(imgQLTP));
 		mnChucNang.add(mnQLTP);
-		
-		JMenu mnQLTraPhong = new JMenu("Quản lý trả phòng");
-		mnQLTraPhong.setFont(new Font("Segoe UI", Font.BOLD, 14));
-		Image imgQLTraPhong = new ImageIcon(this.getClass().getResource("/img/qltraphong.png")).getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
-		mnQLTraPhong.setIcon(new ImageIcon(imgQLTraPhong));
-		mnChucNang.add(mnQLTraPhong);
 		
 		JMenu mnQLP = new JMenu("Quản lý phòng");
 		mnQLP.setSelected(true);
@@ -110,6 +100,13 @@ public class GDQuanLyPhong extends JFrame{
 		mnChucNang.add(mnHTP);
 		
 		JMenu mnQLDV = new JMenu("Quản lý dịch vụ");
+		mnQLDV.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				new GDDichVu(tenTK).setVisible(true);
+				dispose();
+			}
+		});
 		mnQLDV.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		Image imgQLDV = new ImageIcon(this.getClass().getResource("/img/qldv.png")).getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
 		mnQLDV.setIcon(new ImageIcon(imgQLDV));
@@ -181,6 +178,20 @@ public class GDQuanLyPhong extends JFrame{
 		lblDangXuat.setForeground(Color.BLUE);
 		lblDangXuat.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 14));
 		mnChucNang.add(lblDangXuat);
+		
+		JLabel lblNewLabel_1_1 = new JLabel("     ");
+		mnChucNang.add(lblNewLabel_1_1);
+		
+		JLabel lblDoiMatKhau = new JLabel("Đổi mật khẩu");
+		lblDoiMatKhau.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				new GDDoiMatKhau().setVisible(true);
+			}
+		});
+		lblDoiMatKhau.setForeground(Color.BLUE);
+		lblDoiMatKhau.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 14));
+		mnChucNang.add(lblDoiMatKhau);
 		
 		JPanel pnBang = new JPanel();
 		pnBang.setBackground(Color.WHITE);

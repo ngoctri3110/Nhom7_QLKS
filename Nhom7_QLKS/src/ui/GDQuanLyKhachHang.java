@@ -61,6 +61,8 @@ public class GDQuanLyKhachHang extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(MAXIMIZED_BOTH);
 		setLocationRelativeTo(null);
+		Image imgChinh = new ImageIcon(this.getClass().getResource("/img/logo.jpg")).getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+		setIconImage(imgChinh);
 		
 		JMenuBar mnChucNang = new JMenuBar();
 		mnChucNang.setFont(new Font("Segoe UI", Font.BOLD, 20));
@@ -70,7 +72,7 @@ public class GDQuanLyKhachHang extends JFrame{
 		mnQLTP.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDQuanLyThuePhong(tenTK).setVisible(true);
+				new GDQuanLyThueTraPhong(tenTK).setVisible(true);
 				dispose();
 			}
 		});
@@ -78,12 +80,6 @@ public class GDQuanLyKhachHang extends JFrame{
 		Image imgQLTP = new ImageIcon(this.getClass().getResource("/img/qltp.png")).getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
 		mnQLTP.setIcon(new ImageIcon(imgQLTP));
 		mnChucNang.add(mnQLTP);
-		
-		JMenu mnQLTraPhong = new JMenu("Quản lý trả phòng");
-		mnQLTraPhong.setFont(new Font("Segoe UI", Font.BOLD, 14));
-		Image imgQLTraPhong = new ImageIcon(this.getClass().getResource("/img/qltraphong.png")).getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
-		mnQLTraPhong.setIcon(new ImageIcon(imgQLTraPhong));
-		mnChucNang.add(mnQLTraPhong);
 		
 		JMenu mnQLP = new JMenu("Quản lý phòng");
 		mnQLP.addMouseListener(new MouseAdapter() {
@@ -105,12 +101,20 @@ public class GDQuanLyKhachHang extends JFrame{
 		mnChucNang.add(mnHTP);
 		
 		JMenu mnQLDV = new JMenu("Quản lý dịch vụ");
+		mnQLDV.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				new GDDichVu(tenTK).setVisible(true);
+				dispose();
+			}
+		});
 		mnQLDV.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		Image imgQLDV = new ImageIcon(this.getClass().getResource("/img/qldv.png")).getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
 		mnQLDV.setIcon(new ImageIcon(imgQLDV));
 		mnChucNang.add(mnQLDV);
 		
 		JMenu mnQLKH = new JMenu("Quản lý khách hàng");
+		mnQLKH.setSelected(true);
 		mnQLKH.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -176,6 +180,20 @@ public class GDQuanLyKhachHang extends JFrame{
 		lblDangXuat.setForeground(Color.BLUE);
 		lblDangXuat.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 14));
 		mnChucNang.add(lblDangXuat);
+		
+		JLabel lblNewLabel_1_1 = new JLabel("     ");
+		mnChucNang.add(lblNewLabel_1_1);
+		
+		JLabel lblDoiMatKhau = new JLabel("Đổi mật khẩu");
+		lblDoiMatKhau.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				new GDDoiMatKhau().setVisible(true);
+			}
+		});
+		lblDoiMatKhau.setForeground(Color.BLUE);
+		lblDoiMatKhau.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 14));
+		mnChucNang.add(lblDoiMatKhau);
 		
 		JPanel pnQLKH = new JPanel();
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
@@ -251,14 +269,14 @@ public class GDQuanLyKhachHang extends JFrame{
 		
 		radTimKiemGTNam.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(radTimKiemGTNu.isSelected())
-					radTimKiemGTNam.setSelected(false);
+				if(radTimKiemGTNam.isSelected())
+					radTimKiemGTNu.setSelected(false);
 			}
 		});
 		radTimKiemGTNu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(radTimKiemGTNam.isSelected())
-					radTimKiemGTNu.setSelected(false);
+				if(radTimKiemGTNu.isSelected())
+					radTimKiemGTNam.setSelected(false);
 			}
 		});
 		

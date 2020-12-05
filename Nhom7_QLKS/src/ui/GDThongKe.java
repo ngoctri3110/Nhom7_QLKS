@@ -29,9 +29,6 @@ import java.awt.Color;
 
 public class GDThongKe extends JFrame{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7497550087011451461L;
 	
 	public static JFreeChart createChart() {
@@ -80,11 +77,11 @@ public class GDThongKe extends JFrame{
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
 	public GDThongKe(String tenTK) {
-
+		
+		Image imgChinh = new ImageIcon(this.getClass().getResource("/img/logo.jpg")).getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+		setIconImage(imgChinh);
+		
         JFreeChart pieChart = createCircleChart(createCircleDataset());
         ChartPanel chartCirclePanel = new ChartPanel(pieChart);
         ChartPanel chartPanel = new ChartPanel(createChart());
@@ -98,10 +95,10 @@ public class GDThongKe extends JFrame{
         groupLayout.setHorizontalGroup(
         	groupLayout.createParallelGroup(Alignment.LEADING)
         		.addGroup(groupLayout.createSequentialGroup()
-        			.addComponent(chartPanel, GroupLayout.PREFERRED_SIZE, 730, GroupLayout.PREFERRED_SIZE)
+        			.addComponent(chartPanel, GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
         			.addPreferredGap(ComponentPlacement.RELATED)
-        			.addComponent(chartCirclePanel, GroupLayout.DEFAULT_SIZE, 628, Short.MAX_VALUE))
-        		.addComponent(btnThngK, GroupLayout.DEFAULT_SIZE, 1364, Short.MAX_VALUE)
+        			.addComponent(chartCirclePanel, GroupLayout.DEFAULT_SIZE, 630, Short.MAX_VALUE))
+        		.addComponent(btnThngK, GroupLayout.DEFAULT_SIZE, 1366, Short.MAX_VALUE)
         );
         groupLayout.setVerticalGroup(
         	groupLayout.createParallelGroup(Alignment.LEADING)
@@ -109,8 +106,8 @@ public class GDThongKe extends JFrame{
         			.addComponent(btnThngK, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
         			.addGap(115)
         			.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-        				.addComponent(chartPanel, GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE)
-        				.addComponent(chartCirclePanel, GroupLayout.DEFAULT_SIZE, 542, Short.MAX_VALUE)))
+        				.addComponent(chartPanel, GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE)
+        				.addComponent(chartCirclePanel, GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE)))
         );
         getContentPane().setLayout(groupLayout);
 		
@@ -128,7 +125,7 @@ public class GDThongKe extends JFrame{
 		mnQLTP.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDQuanLyThuePhong(tenTK).setVisible(true);
+				new GDQuanLyThueTraPhong(tenTK).setVisible(true);
 				dispose();
 			}
 		});
@@ -136,12 +133,6 @@ public class GDThongKe extends JFrame{
 		Image imgQLTP = new ImageIcon(this.getClass().getResource("/img/qltp.png")).getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
 		mnQLTP.setIcon(new ImageIcon(imgQLTP));
 		mnChucNang.add(mnQLTP);
-		
-		JMenu mnQLTraPhong = new JMenu("Quản lý trả phòng");
-		mnQLTraPhong.setFont(new Font("Segoe UI", Font.BOLD, 14));
-		Image imgQLTraPhong = new ImageIcon(this.getClass().getResource("/img/qltraphong.png")).getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
-		mnQLTraPhong.setIcon(new ImageIcon(imgQLTraPhong));
-		mnChucNang.add(mnQLTraPhong);
 		
 		JMenu mnQLP = new JMenu("Quản lý phòng");
 		mnQLP.addMouseListener(new MouseAdapter() {
@@ -195,6 +186,7 @@ public class GDThongKe extends JFrame{
 		mnChucNang.add(mnQLNV);
 		
 		JMenu mnThongKe = new JMenu("Thống kê");
+		mnThongKe.setSelected(true);
 		mnThongKe.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -234,5 +226,19 @@ public class GDThongKe extends JFrame{
 		lblDangXuat.setForeground(Color.BLUE);
 		lblDangXuat.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 14));
 		mnChucNang.add(lblDangXuat);
+		
+		JLabel lblNewLabel_1_1 = new JLabel("     ");
+		mnChucNang.add(lblNewLabel_1_1);
+		
+		JLabel lblDoiMatKhau = new JLabel("Đổi mật khẩu");
+		lblDoiMatKhau.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				new GDDoiMatKhau().setVisible(true);
+			}
+		});
+		lblDoiMatKhau.setForeground(Color.BLUE);
+		lblDoiMatKhau.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 14));
+		mnChucNang.add(lblDoiMatKhau);
 	}
 }

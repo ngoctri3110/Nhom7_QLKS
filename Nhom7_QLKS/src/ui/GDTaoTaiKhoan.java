@@ -54,16 +54,10 @@ public class GDTaoTaiKhoan extends JFrame{
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
 	public GDTaoTaiKhoan() {
 		initialize();
 	}
 
-	/**
-	 * Initialize the contents of the frame.
-	 */
 	private void initialize() {
 		setBounds(100, 100, 588, 500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -71,7 +65,8 @@ public class GDTaoTaiKhoan extends JFrame{
 		getRootPane().setWindowDecorationStyle(JRootPane.NONE);
 		setResizable(false);
 		setLocationRelativeTo(null);
-		
+		Image imgChinh = new ImageIcon(this.getClass().getResource("/img/logo.jpg")).getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+		setIconImage(imgChinh);
 		
 		pnHinhNen = new JPanel();
 

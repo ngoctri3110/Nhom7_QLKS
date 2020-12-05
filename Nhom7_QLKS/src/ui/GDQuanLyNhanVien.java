@@ -34,9 +34,6 @@ import java.awt.SystemColor;
 
 public class GDQuanLyNhanVien extends JFrame{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 4289775796109531296L;
 	private JTextField txtTenNV;
 	private JTextField txtSDT;
@@ -57,15 +54,14 @@ public class GDQuanLyNhanVien extends JFrame{
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
 	public GDQuanLyNhanVien(String tenTK) {
 		setTitle("Chương trình quản lý thông tin thuê phòng khách sạn Tâm Bình");
 		setBounds(100, 100, 1380, 755);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setExtendedState(MAXIMIZED_BOTH);
 		setLocationRelativeTo(null);
+		Image imgChinh = new ImageIcon(this.getClass().getResource("/img/logo.jpg")).getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+		setIconImage(imgChinh);
 		
 		JMenuBar mnChucNang = new JMenuBar();
 		mnChucNang.setFont(new Font("Segoe UI", Font.BOLD, 20));
@@ -75,7 +71,7 @@ public class GDQuanLyNhanVien extends JFrame{
 		mnQLTP.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDQuanLyThuePhong(tenTK).setVisible(true);
+				new GDQuanLyThueTraPhong(tenTK).setVisible(true);
 				dispose();
 			}
 		});
@@ -83,12 +79,6 @@ public class GDQuanLyNhanVien extends JFrame{
 		Image imgQLTP = new ImageIcon(this.getClass().getResource("/img/qltp.png")).getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
 		mnQLTP.setIcon(new ImageIcon(imgQLTP));
 		mnChucNang.add(mnQLTP);
-		
-		JMenu mnQLTraPhong = new JMenu("Quản lý trả phòng");
-		mnQLTraPhong.setFont(new Font("Segoe UI", Font.BOLD, 14));
-		Image imgQLTraPhong = new ImageIcon(this.getClass().getResource("/img/qltraphong.png")).getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
-		mnQLTraPhong.setIcon(new ImageIcon(imgQLTraPhong));
-		mnChucNang.add(mnQLTraPhong);
 		
 		JMenu mnQLP = new JMenu("Quản lý phòng");
 		mnQLP.addMouseListener(new MouseAdapter() {
@@ -110,6 +100,13 @@ public class GDQuanLyNhanVien extends JFrame{
 		mnChucNang.add(mnHTP);
 		
 		JMenu mnQLDV = new JMenu("Quản lý dịch vụ");
+		mnQLDV.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				new GDDichVu(tenTK).setVisible(true);
+				dispose();
+			}
+		});
 		mnQLDV.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		Image imgQLDV = new ImageIcon(this.getClass().getResource("/img/qldv.png")).getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
 		mnQLDV.setIcon(new ImageIcon(imgQLDV));
@@ -129,6 +126,7 @@ public class GDQuanLyNhanVien extends JFrame{
 		mnChucNang.add(mnQLKH);
 		
 		JMenu mnQLNV = new JMenu("Quản lý nhân viên");
+		mnQLNV.setSelected(true);
 		mnQLNV.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -181,6 +179,20 @@ public class GDQuanLyNhanVien extends JFrame{
 		lblDangXuat.setForeground(Color.BLUE);
 		lblDangXuat.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 14));
 		mnChucNang.add(lblDangXuat);
+		
+		JLabel lblNewLabel_1_1 = new JLabel("     ");
+		mnChucNang.add(lblNewLabel_1_1);
+		
+		JLabel lblDoiMatKhau = new JLabel("Đổi mật khẩu");
+		lblDoiMatKhau.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				new GDDoiMatKhau().setVisible(true);
+			}
+		});
+		lblDoiMatKhau.setForeground(Color.BLUE);
+		lblDoiMatKhau.setFont(new Font("Times New Roman", Font.BOLD | Font.ITALIC, 14));
+		mnChucNang.add(lblDoiMatKhau);
 		
 		JPanel pnThongTinKH = new JPanel();
 		pnThongTinKH.setBorder(new MatteBorder(1, 1, 1, 1, (Color) new Color(0, 0, 0)));
@@ -287,6 +299,11 @@ public class GDQuanLyNhanVien extends JFrame{
 		btnCapNhat.setBackground(SystemColor.info);
 		
 		JButton btnTaoTaiKhoan = new JButton("Tạo tài khoản");
+		btnTaoTaiKhoan.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new GDTaoTaiKhoan().setVisible(true);
+			}
+		});
 		btnTaoTaiKhoan.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnTaoTaiKhoan.setFocusable(false);
 		btnTaoTaiKhoan.setBackground(SystemColor.info);
