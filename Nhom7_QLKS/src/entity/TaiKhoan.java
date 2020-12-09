@@ -1,8 +1,8 @@
 package entity;
 
 public class TaiKhoan {
-	private String taiKhoan = "admin";
-	private String matKhau = "admin";		
+	private String taiKhoan;
+	private String matKhau;		
 	
 	public TaiKhoan() {
 		super();

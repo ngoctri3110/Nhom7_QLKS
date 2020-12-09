@@ -7,6 +7,8 @@ import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -15,6 +17,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
+
+import connectDB.ConnectDB;
+import dao.TaiKhoanDao;
+import entity.NhanVien;
+
 import javax.swing.SwingConstants;
 
 public class GDChinh extends JFrame{
@@ -25,17 +32,28 @@ public class GDChinh extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					String tenTK = "abc";
-					GDChinh chinh = new GDChinh(tenTK);
-					chinh.setVisible(true);
+//					String tenTK = "abc";
+//					GDChinh chinh = new GDChinh(tenTK);
+//					chinh.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
 	}
+
+	private TaiKhoanDao nv_dao;
 	
 	public GDChinh(String tenTK) {
+		
+		try {
+			ConnectDB.getInstance().connect();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		nv_dao = new TaiKhoanDao();
+		
 		getContentPane().setBackground(Color.WHITE);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Chương trình quản lý thông tin thuê phòng khách sạn Tâm Bình");
@@ -237,7 +255,11 @@ public class GDChinh extends JFrame{
 		JLabel lblTenTaiKhoan = new JLabel("New label");
 		lblTenTaiKhoan.setForeground(Color.RED);
 		lblTenTaiKhoan.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblTenTaiKhoan.setText(tenTK);
+		ArrayList<NhanVien> listNV = nv_dao.getTenNVTheoTaiKhoan(tenTK);
+		for(NhanVien nv : listNV) {
+			lblTenTaiKhoan.setText(nv.getTenNV() + "");
+		}
+		
 		
 		JLabel lblDangXuat = new JLabel("Đăng xuất");
 		lblDangXuat.addMouseListener(new MouseAdapter() {
@@ -258,7 +280,7 @@ public class GDChinh extends JFrame{
 		lblDoiMatKhau.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDDoiMatKhau().setVisible(true);
+				new GDDoiMatKhau(tenTK).setVisible(true);
 			}
 		});
 		lblDoiMatKhau.setForeground(Color.BLUE);
@@ -290,26 +312,24 @@ public class GDChinh extends JFrame{
 										.addGroup(groupLayout.createSequentialGroup()
 											.addComponent(lblQLTP, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
 											.addPreferredGap(ComponentPlacement.RELATED)
-											.addComponent(lblQuanLyThuePhong, GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)))
-									.addGap(173)
-									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+											.addComponent(lblQuanLyThuePhong, GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)))
+									.addGap(172)
+									.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 										.addGroup(groupLayout.createSequentialGroup()
-											.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-												.addGroup(groupLayout.createSequentialGroup()
-													.addComponent(lblQLKH, GroupLayout.DEFAULT_SIZE, 80, Short.MAX_VALUE)
-													.addGap(6)
-													.addComponent(lblQuanLyKhachHang, GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE))
-												.addGroup(groupLayout.createSequentialGroup()
-													.addComponent(lblQLNV, GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
-													.addPreferredGap(ComponentPlacement.RELATED)
-													.addComponent(lblQuanLyNhanVien, GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
-													.addGap(12)))
-											.addGap(92))
-										.addGroup(groupLayout.createSequentialGroup()
-											.addComponent(lblTK, GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)
+											.addComponent(lblQLKH, GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
 											.addGap(6)
-											.addComponent(lblThongKe, GroupLayout.DEFAULT_SIZE, 372, Short.MAX_VALUE)
-											.addGap(104))))))
+											.addComponent(lblQuanLyKhachHang, GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE))
+										.addGroup(groupLayout.createSequentialGroup()
+											.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+												.addComponent(lblTK, GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+												.addComponent(lblQLNV, GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE))
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+												.addComponent(lblThongKe, GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE)
+												.addGroup(groupLayout.createSequentialGroup()
+													.addComponent(lblQuanLyNhanVien, GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+													.addGap(12)))))
+									.addGap(92))))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.RELATED, 970, Short.MAX_VALUE)
 							.addComponent(lblTenTaiKhoan)
@@ -347,20 +367,28 @@ public class GDChinh extends JFrame{
 					.addGap(71)
 					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblHuyThuePhong, GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
-								.addComponent(lblHTP, GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE))
+							.addComponent(lblThongKe, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
+							.addContainerGap())
+						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+								.addComponent(lblTK, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+								.addComponent(lblHuyThuePhong, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+								.addComponent(lblHTP, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE))
 							.addGap(80)
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblQLDV, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
 								.addComponent(lblQuanLyDichVu, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE))
-							.addGap(95))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblTK, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblThongKe, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE))
-							.addContainerGap())))
+							.addGap(95))))
 		);
 		getContentPane().setLayout(groupLayout);
+		
+		if(!(tenTK.equals("TKQLN01") || tenTK.equals("TKQLN06"))) {
+			lblQuanLyNhanVien.removeMouseListener(lblQuanLyNhanVien.getMouseListeners()[0]);
+			lblThongKe.removeMouseListener(lblThongKe.getMouseListeners()[0]);
+			lblQuanLyNhanVien.setEnabled(false);
+			lblThongKe.setEnabled(false);
+			lblQuanLyNhanVien.removeMouseMotionListener(lblQuanLyNhanVien.getMouseMotionListeners()[0]);
+			lblThongKe.removeMouseMotionListener(lblThongKe.getMouseMotionListeners()[0]);
+		}
 	}
 }

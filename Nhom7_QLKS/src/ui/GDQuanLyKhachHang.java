@@ -9,6 +9,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -31,15 +37,31 @@ import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
-import java.awt.SystemColor;
 
-public class GDQuanLyKhachHang extends JFrame{
+import connectDB.ConnectDB;
+import dao.KhachHangDAO;
+import dao.TaiKhoanDao;
+import entity.KhachHang;
+import entity.NhanVien;
+
+import java.awt.SystemColor;
+import javax.swing.ScrollPaneConstants;
+
+public class GDQuanLyKhachHang extends JFrame implements ActionListener{
 
 	private static final long serialVersionUID = -6025494785132432266L;
 	private JTable tableKhachHang;
 	private JTextField txtCMND;
 	private JTextField txtTenKH;
 	private JTextField txtDiaChi;
+	private TaiKhoanDao nv_dao;
+	private KhachHangDAO kh_dao;
+	private DefaultTableModel modelKhachHang;
+	private JButton btnThem;
+	private JComboBox<String> cboQuocTich;
+	private JRadioButton radTimKiemGTNu;
+	private JRadioButton radTimKiemGTNam;
+	private JDateChooser dateChooser;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -56,6 +78,16 @@ public class GDQuanLyKhachHang extends JFrame{
 	}
 	
 	public GDQuanLyKhachHang(String tenTK) {
+		
+		try {
+			ConnectDB.getInstance().connect();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		nv_dao = new TaiKhoanDao();
+		kh_dao = new KhachHangDAO();
+		
 		setTitle("Chương trình quản lý thông tin thuê phòng khách sạn Tâm Bình");
 		setBounds(100, 100, 1380, 755);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -95,6 +127,13 @@ public class GDQuanLyKhachHang extends JFrame{
 		mnChucNang.add(mnQLP);
 		
 		JMenu mnHTP = new JMenu("Hủy thuê phòng");
+		mnHTP.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				new GDHuyThuePhong(tenTK).setVisible(true);
+				dispose();
+			}
+		});
 		mnHTP.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		Image imgHuyThuePhong = new ImageIcon(this.getClass().getResource("/img/huythuephong.png")).getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
 		mnHTP.setIcon(new ImageIcon(imgHuyThuePhong));
@@ -172,7 +211,10 @@ public class GDQuanLyKhachHang extends JFrame{
 		JLabel lblTenTaiKhoan = new JLabel("New label");
 		lblTenTaiKhoan.setForeground(Color.RED);
 		lblTenTaiKhoan.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblTenTaiKhoan.setText(tenTK);
+		ArrayList<NhanVien> listNV = nv_dao.getTenNVTheoTaiKhoan(tenTK);
+		for(NhanVien nv : listNV) {
+			lblTenTaiKhoan.setText(nv.getTenNV() + "");
+		}
 		mnChucNang.add(lblTenTaiKhoan);
 		
 		JLabel lblNewLabel_1 = new JLabel("     ");
@@ -188,7 +230,7 @@ public class GDQuanLyKhachHang extends JFrame{
 		lblDoiMatKhau.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDDoiMatKhau().setVisible(true);
+				new GDDoiMatKhau(tenTK).setVisible(true);
 			}
 		});
 		lblDoiMatKhau.setForeground(Color.BLUE);
@@ -248,11 +290,6 @@ public class GDQuanLyKhachHang extends JFrame{
 		
 		JComboBox<String> cboTimKiemCMND = new JComboBox<String>();
 		
-		JLabel lblTimTenKH = new JLabel("Tên khách hàng:");
-		lblTimTenKH.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		
-		JComboBox<String> cboTimKiemTenKH = new JComboBox<String>();
-		
 		JLabel lblTimKiemQuocTich = new JLabel("Quốc tịch:");
 		lblTimKiemQuocTich.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		
@@ -261,10 +298,10 @@ public class GDQuanLyKhachHang extends JFrame{
 		JLabel lblTimKiemGioiTinh = new JLabel("Giới tính:");
 		lblTimKiemGioiTinh.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		
-		JRadioButton radTimKiemGTNam = new JRadioButton("Nam");
+		radTimKiemGTNam = new JRadioButton("Nam");
 		radTimKiemGTNam.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		
-		JRadioButton radTimKiemGTNu = new JRadioButton("Nữ");
+		radTimKiemGTNu = new JRadioButton("Nữ");
 		radTimKiemGTNu.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		
 		radTimKiemGTNam.addActionListener(new ActionListener() {
@@ -287,44 +324,33 @@ public class GDQuanLyKhachHang extends JFrame{
 					.addContainerGap()
 					.addGroup(gl_pnTimKiem.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_pnTimKiem.createSequentialGroup()
-							.addGroup(gl_pnTimKiem.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_pnTimKiem.createSequentialGroup()
-									.addGroup(gl_pnTimKiem.createParallelGroup(Alignment.LEADING)
-										.addGroup(gl_pnTimKiem.createSequentialGroup()
-											.addComponent(lblTimKiemCMND, GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
-											.addGap(3))
-										.addComponent(lblTimTenKH, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-									.addGap(17))
-								.addComponent(lblTimKiemQuocTich, GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE))
-							.addGroup(gl_pnTimKiem.createParallelGroup(Alignment.TRAILING)
-								.addComponent(cboTimKiemCMND, 0, 196, Short.MAX_VALUE)
-								.addComponent(cboTimKiemTenKH, 0, 196, Short.MAX_VALUE)
-								.addComponent(cboTimKiemQT, 0, 196, Short.MAX_VALUE)))
+							.addComponent(lblTimKiemCMND, GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
+							.addGap(20)
+							.addComponent(cboTimKiemCMND, 0, 196, Short.MAX_VALUE))
 						.addGroup(gl_pnTimKiem.createSequentialGroup()
 							.addComponent(lblTimKiemGioiTinh, GroupLayout.DEFAULT_SIZE, 152, Short.MAX_VALUE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addComponent(radTimKiemGTNam, GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
 							.addGap(34)
 							.addComponent(radTimKiemGTNu, GroupLayout.DEFAULT_SIZE, 61, Short.MAX_VALUE)
-							.addGap(31)))
+							.addGap(31))
+						.addGroup(gl_pnTimKiem.createSequentialGroup()
+							.addComponent(lblTimKiemQuocTich, GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
+							.addComponent(cboTimKiemQT, 0, 196, Short.MAX_VALUE)))
 					.addGap(34))
 		);
 		gl_pnTimKiem.setVerticalGroup(
 			gl_pnTimKiem.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_pnTimKiem.createSequentialGroup()
 					.addGap(44)
-					.addGroup(gl_pnTimKiem.createParallelGroup(Alignment.LEADING)
-						.addComponent(cboTimKiemCMND, GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)
-						.addComponent(lblTimKiemCMND, GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE))
-					.addGap(18)
-					.addGroup(gl_pnTimKiem.createParallelGroup(Alignment.LEADING)
-						.addComponent(cboTimKiemTenKH, GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)
-						.addComponent(lblTimTenKH, GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE))
-					.addGap(18)
-					.addGroup(gl_pnTimKiem.createParallelGroup(Alignment.LEADING)
-						.addComponent(cboTimKiemQT, GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)
-						.addComponent(lblTimKiemQuocTich, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-					.addGap(21)
+					.addGroup(gl_pnTimKiem.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(cboTimKiemCMND, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblTimKiemCMND, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE))
+					.addGap(41)
+					.addGroup(gl_pnTimKiem.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(cboTimKiemQT, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblTimKiemQuocTich))
+					.addGap(38)
 					.addGroup(gl_pnTimKiem.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblTimKiemGioiTinh, GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)
 						.addComponent(radTimKiemGTNam, GroupLayout.PREFERRED_SIZE, 25, Short.MAX_VALUE)
@@ -373,13 +399,13 @@ public class GDQuanLyKhachHang extends JFrame{
 		lblNgaySinh.setHorizontalAlignment(SwingConstants.TRAILING);
 		lblNgaySinh.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		
-		JDateChooser dateChooser = new JDateChooser();
+		dateChooser = new JDateChooser();
 		
 		JLabel lblQuocTich = new JLabel("Quốc tịch:");
 		lblQuocTich.setHorizontalAlignment(SwingConstants.TRAILING);
 		lblQuocTich.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		
-		JComboBox<String> cboQuocTich = new JComboBox<String>();
+		cboQuocTich = new JComboBox<String>();
 		cboQuocTich.addItem("Việt Nam");
 		cboQuocTich.addItem("Mỹ");
 		cboQuocTich.addItem("Nhật Bản");
@@ -392,7 +418,9 @@ public class GDQuanLyKhachHang extends JFrame{
 		txtDiaChi = new JTextField();
 		txtDiaChi.setColumns(10);
 		
-		JButton btnThem = new JButton("Thêm");
+		btnThem = new JButton("Thêm");
+		
+		
 		btnThem.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnThem.setFocusable(false);
 		btnThem.setBackground(SystemColor.info);
@@ -502,19 +530,108 @@ public class GDQuanLyKhachHang extends JFrame{
 		pnBang.setLayout(new BorderLayout(0, 0));
 		
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 		pnBang.add(scrollPane, BorderLayout.CENTER);
 		
 		tableKhachHang = new JTable();
-		tableKhachHang.setModel(new DefaultTableModel(
+		tableKhachHang.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int row = tableKhachHang.getSelectedRow();
+				try {
+					Date date = (Date) new SimpleDateFormat("yyyy-MM-dd").parse((String) modelKhachHang.getValueAt(row, 3));
+					dateChooser.setDate(date);
+				} catch (ParseException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		tableKhachHang.setModel(modelKhachHang = new DefaultTableModel(
 			new Object[][] {
-				{null, " ", " ", null, null, null},
 			},
 			new String[] {
 				"CMND", "T\u00EAn kh\u00E1ch h\u00E0ng", "Gi\u1EDBi t\u00EDnh", "Sinh nh\u1EADt", "Qu\u1ED1c t\u1ECBch", "\u0110\u1ECBa ch\u1EC9"
 			}
 		));
+		tableKhachHang.getColumnModel().getColumn(0).setPreferredWidth(30);
+		tableKhachHang.getColumnModel().getColumn(2).setPreferredWidth(15);
+		tableKhachHang.getColumnModel().getColumn(5).setPreferredWidth(130);
+		DocDuLieuDBVaoTable();
 		scrollPane.setViewportView(tableKhachHang);
 		pnQLKH.setLayout(gl_pnQLKH);
 		getContentPane().setLayout(groupLayout);
+		
+		btnThem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Object o = e.getSource();
+				if(o.equals(btnThem)) {
+					if(validData()) {
+						String tenKH = txtTenKH.getText();
+						String diaChi = txtDiaChi.getText();
+						String quocTich = (String) cboQuocTich.getSelectedItem();
+						String cmnd = txtCMND.getText();
+						
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+						String date = sdf.format(dateChooser.getDate());
+						Date ngaySinh = Date.parse(date);
+						
+						boolean gt = false;
+						if(o.equals(radTimKiemGTNam))
+							gt = true;
+						else if(o.equals(radTimKiemGTNu))
+							gt = false;
+						
+						List<KhachHang> listKH = kh_dao.getTatCaKH();
+						int i = 1;
+						for(KhachHang khachHang : listKH) {
+							i++;
+						}
+						
+						String maKH = "KH" + i;
+						
+						KhachHang kh = new KhachHang(cmnd, diaChi, gt, maKH, ngaySinh, quocTich, tenKH);
+						
+						if(!kh_dao.create(kh))
+							JOptionPane.showMessageDialog(null, "Mã khách hàng đã tồn tại");
+						else {
+							modelKhachHang.addRow(new Object[] {
+									kh.getCmnd(), kh.getTenKH(),
+									kh.isGioiTinh() == false ? "Nữ" : "Nam",
+									sdf.format(kh.getNgaySinh()), kh.getQuocTich(), kh.getDiaChi()
+							});
+							JOptionPane.showMessageDialog(null, "Thêm thành công");
+						}
+					}
+				}
+			}
+		});
+		
+		if(!(tenTK.equals("TKQLN01") || tenTK.equals("TKQLN06"))) {
+			mnChucNang.remove(mnQLNV);
+			mnChucNang.remove(mnThongKe);
+		}
+		
+		
+	}
+	private void DocDuLieuDBVaoTable() {
+		List<KhachHang> list = kh_dao.getTatCaKH();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+		for(KhachHang kh : list) {
+			modelKhachHang.addRow(new Object[] {
+					kh.getCmnd(), kh.getTenKH(),
+					kh.isGioiTinh() == false ? "Nữ" : "Nam",
+					sdf.format(kh.getNgaySinh()), kh.getQuocTich(), kh.getDiaChi()
+			});
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		
+	}
+
+	private boolean validData() {
+		return true;
 	}
 }

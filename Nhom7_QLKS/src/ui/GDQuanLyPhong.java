@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -26,17 +28,23 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableModel;
 
+import connectDB.ConnectDB;
+import dao.TaiKhoanDao;
+import entity.NhanVien;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 public class GDQuanLyPhong extends JFrame{
 
 	private static final long serialVersionUID = -1360180292521970427L;
 	private JTable tablePhong;
 	private JTextField txtSoPhong;
-	private JTextField txtLoaiPhong;
 	private JTextField txtTinhTrangPhong;
 	private JTextField txtMoTa;
 	private JTextField txtSoGiuong;
 	private JTextField txtSoNguoiO;
 	private JTextField txtDienTich;
+	private TaiKhoanDao nv_dao;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -53,6 +61,15 @@ public class GDQuanLyPhong extends JFrame{
 	}
 
 	public GDQuanLyPhong(String tenTK) {
+		
+		try {
+			ConnectDB.getInstance().connect();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		nv_dao = new TaiKhoanDao();
+		
 		setBounds(100, 100, 1380, 755);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Chương trình quản lý thông tin thuê phòng khách sạn Tâm Bình");
@@ -94,6 +111,13 @@ public class GDQuanLyPhong extends JFrame{
 		mnChucNang.add(mnQLP);
 		
 		JMenu mnHTP = new JMenu("Hủy thuê phòng");
+		mnHTP.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				new GDHuyThuePhong(tenTK).setVisible(true);
+				dispose();
+			}
+		});
 		mnHTP.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		Image imgHuyThuePhong = new ImageIcon(this.getClass().getResource("/img/huythuephong.png")).getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
 		mnHTP.setIcon(new ImageIcon(imgHuyThuePhong));
@@ -116,7 +140,7 @@ public class GDQuanLyPhong extends JFrame{
 		mnQLKH.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDQuanLyNhanVien(tenTK).setVisible(true);
+				new GDQuanLyKhachHang(tenTK).setVisible(true);
 				dispose();
 			}
 		});
@@ -167,10 +191,13 @@ public class GDQuanLyPhong extends JFrame{
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		mnChucNang.add(lblNewLabel);
 		
-		JLabel lblTenTaiKhoan = new JLabel("New label");
+		JLabel lblTenTaiKhoan = new JLabel("<dynamic>");
 		lblTenTaiKhoan.setForeground(Color.RED);
 		lblTenTaiKhoan.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblTenTaiKhoan.setText(tenTK);
+		ArrayList<NhanVien> listNV = nv_dao.getTenNVTheoTaiKhoan(tenTK);
+		for(NhanVien nv : listNV) {
+			lblTenTaiKhoan.setText(nv.getTenNV() + "");
+		}
 		mnChucNang.add(lblTenTaiKhoan);
 		
 		JLabel lblNewLabel_1 = new JLabel("     ");
@@ -186,7 +213,7 @@ public class GDQuanLyPhong extends JFrame{
 		lblDoiMatKhau.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDDoiMatKhau().setVisible(true);
+				new GDDoiMatKhau(tenTK).setVisible(true);
 			}
 		});
 		lblDoiMatKhau.setForeground(Color.BLUE);
@@ -336,22 +363,20 @@ public class GDQuanLyPhong extends JFrame{
 		lblSoPhong.setFont(new Font("Tahoma", Font.BOLD, 14));
 		
 		txtSoPhong = new JTextField();
+		txtSoPhong.setEditable(false);
 		txtSoPhong.setBackground(new Color(240, 230, 140));
 		txtSoPhong.setColumns(10);
 		
 		JLabel lblLoaiPhong = new JLabel("Loại phòng:");
 		lblLoaiPhong.setFont(new Font("Tahoma", Font.BOLD, 14));
 		
-		txtLoaiPhong = new JTextField();
-		txtLoaiPhong.setBackground(new Color(240, 230, 140));
-		txtLoaiPhong.setColumns(10);
-		
 		JLabel lblTinhTrangPhong = new JLabel("Tình trạng phòng:");
 		lblTinhTrangPhong.setFont(new Font("Tahoma", Font.BOLD, 14));
 		
 		txtTinhTrangPhong = new JTextField();
+		txtTinhTrangPhong.setBackground(new Color(240, 230, 140));
+		txtTinhTrangPhong.setEditable(false);
 		txtTinhTrangPhong.setText("Chưa thuê");
-		txtTinhTrangPhong.setEnabled(false);
 		txtTinhTrangPhong.setColumns(10);
 		
 		JLabel lblMT = new JLabel("Mô tả:");
@@ -382,41 +407,51 @@ public class GDQuanLyPhong extends JFrame{
 		txtDienTich.setBackground(new Color(240, 230, 140));
 		txtDienTich.setColumns(10);
 		
-		JButton btnThemPhong = new JButton("Thêm");
-		btnThemPhong.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		
-		JButton btnXoa = new JButton("Xóa");
-		btnXoa.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		JButton btnXoaTrang = new JButton("Xóa trắng");
+		btnXoaTrang.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				txtDienTich.setText("");
+				txtMoTa.setText("");
+				txtSoGiuong.setText("");
+				txtSoNguoiO.setText("");
+				txtSoPhong.setText("");
+				txtTinhTrangPhong.setText("");
+			}
+		});
+		btnXoaTrang.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
 		JButton btnSua = new JButton("Sửa");
 		btnSua.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
 		JButton btnKiemTra = new JButton("Kiểm tra");
 		btnKiemTra.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		
+		JComboBox<String> cboLoaiPhong = new JComboBox<String>();
+		cboLoaiPhong.setBackground(new Color(240, 230, 140));
 		GroupLayout gl_pnNhapThongTinPhong = new GroupLayout(pnNhapThongTinPhong);
 		gl_pnNhapThongTinPhong.setHorizontalGroup(
 			gl_pnNhapThongTinPhong.createParallelGroup(Alignment.TRAILING)
-				.addComponent(pnTieuDeNhapTTP, GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
-				.addComponent(pnTrong, GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
+				.addComponent(pnTieuDeNhapTTP, GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+				.addComponent(pnTrong, GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
 				.addGroup(gl_pnNhapThongTinPhong.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_pnNhapThongTinPhong.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_pnNhapThongTinPhong.createSequentialGroup()
 							.addComponent(lblMT, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(txtMoTa, GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
+							.addComponent(txtMoTa, GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE))
 						.addGroup(gl_pnNhapThongTinPhong.createSequentialGroup()
 							.addComponent(lblDienTich, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(txtDienTich, GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
+							.addComponent(txtDienTich, GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE))
 						.addGroup(gl_pnNhapThongTinPhong.createSequentialGroup()
 							.addComponent(lblSoNguoiO, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(txtSoNguoiO, GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
+							.addComponent(txtSoNguoiO, GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE))
 						.addGroup(gl_pnNhapThongTinPhong.createSequentialGroup()
 							.addComponent(lblSoGiuong, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(txtSoGiuong, GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
+							.addComponent(txtSoGiuong, GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE))
 						.addGroup(gl_pnNhapThongTinPhong.createSequentialGroup()
 							.addGroup(gl_pnNhapThongTinPhong.createParallelGroup(Alignment.LEADING)
 								.addComponent(lblTinhTrangPhong, GroupLayout.PREFERRED_SIZE, 137, GroupLayout.PREFERRED_SIZE)
@@ -424,17 +459,16 @@ public class GDQuanLyPhong extends JFrame{
 								.addComponent(lblSoPhong))
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addGroup(gl_pnNhapThongTinPhong.createParallelGroup(Alignment.LEADING)
-								.addComponent(txtTinhTrangPhong, GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
-								.addComponent(txtLoaiPhong, GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
-								.addComponent(txtSoPhong, GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)))
+								.addComponent(cboLoaiPhong, 0, 219, Short.MAX_VALUE)
+								.addComponent(txtTinhTrangPhong, GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)
+								.addComponent(txtSoPhong, GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)))
 						.addGroup(gl_pnNhapThongTinPhong.createSequentialGroup()
-							.addComponent(btnKiemTra, GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
+							.addComponent(btnKiemTra, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 							.addGap(18)
-							.addComponent(btnSua, GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
+							.addComponent(btnSua, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 							.addGap(18)
-							.addComponent(btnXoa, GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)
-							.addGap(18)
-							.addComponent(btnThemPhong, GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE)))
+							.addComponent(btnXoaTrang, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addGap(89)))
 					.addGap(18))
 		);
 		gl_pnNhapThongTinPhong.setVerticalGroup(
@@ -448,7 +482,7 @@ public class GDQuanLyPhong extends JFrame{
 					.addGap(18)
 					.addGroup(gl_pnNhapThongTinPhong.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblLoaiPhong, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-						.addComponent(txtLoaiPhong, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(cboLoaiPhong, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addGroup(gl_pnNhapThongTinPhong.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblTinhTrangPhong, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
@@ -470,13 +504,11 @@ public class GDQuanLyPhong extends JFrame{
 						.addComponent(lblMT, GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
 						.addComponent(txtMoTa, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
-					.addGroup(gl_pnNhapThongTinPhong.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(btnThemPhong, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addGroup(gl_pnNhapThongTinPhong.createParallelGroup(Alignment.BASELINE)
-							.addComponent(btnXoa, GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
-							.addComponent(btnSua, GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
-							.addComponent(btnKiemTra, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE)))
-					.addPreferredGap(ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+					.addGroup(gl_pnNhapThongTinPhong.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnXoaTrang, GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
+						.addComponent(btnSua, GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
+						.addComponent(btnKiemTra, GroupLayout.PREFERRED_SIZE, 26, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
 					.addComponent(pnTrong, GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE))
 		);
 		pnNhapThongTinPhong.setLayout(gl_pnNhapThongTinPhong);
@@ -503,5 +535,10 @@ public class GDQuanLyPhong extends JFrame{
 		tablePhong.getColumnModel().getColumn(5).setPreferredWidth(100);
 		scrollPane.setViewportView(tablePhong);
 		getContentPane().setLayout(groupLayout);
+		
+		if(!(tenTK.equals("TKQLN01") || tenTK.equals("TKQLN06"))) {
+			mnChucNang.remove(mnQLNV);
+			mnChucNang.remove(mnThongKe);
+		}
 	}
 }

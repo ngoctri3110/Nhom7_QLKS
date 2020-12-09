@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -24,6 +26,11 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 import org.jfree.data.general.PieDataset;
+
+import connectDB.ConnectDB;
+import dao.TaiKhoanDao;
+import entity.NhanVien;
+
 import javax.swing.JButton;
 import java.awt.Color;
 
@@ -77,7 +84,17 @@ public class GDThongKe extends JFrame{
 		});
 	}
 
+	private TaiKhoanDao nv_dao;
+
 	public GDThongKe(String tenTK) {
+		
+		try {
+			ConnectDB.getInstance().connect();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		nv_dao = new TaiKhoanDao();
 		
 		Image imgChinh = new ImageIcon(this.getClass().getResource("/img/logo.jpg")).getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
 		setIconImage(imgChinh);
@@ -87,7 +104,7 @@ public class GDThongKe extends JFrame{
         ChartPanel chartPanel = new ChartPanel(createChart());
         
         JButton btnThngK = new JButton("THỐNG KÊ");
-        btnThngK.setFont(new Font("Tahoma", Font.BOLD, 20));
+        btnThngK.setFont(new Font("Tahoma", Font.BOLD, 45));
         btnThngK.setFocusable(false);
         btnThngK.setEnabled(false);
         btnThngK.setBackground(Color.CYAN);
@@ -103,11 +120,11 @@ public class GDThongKe extends JFrame{
         groupLayout.setVerticalGroup(
         	groupLayout.createParallelGroup(Alignment.LEADING)
         		.addGroup(groupLayout.createSequentialGroup()
-        			.addComponent(btnThngK, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
-        			.addGap(115)
-        			.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-        				.addComponent(chartPanel, GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE)
-        				.addComponent(chartCirclePanel, GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE)))
+        			.addComponent(btnThngK, GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
+        			.addPreferredGap(ComponentPlacement.RELATED)
+        			.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+        				.addComponent(chartCirclePanel, GroupLayout.DEFAULT_SIZE, 616, Short.MAX_VALUE)
+        				.addComponent(chartPanel, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 616, Short.MAX_VALUE)))
         );
         getContentPane().setLayout(groupLayout);
 		
@@ -148,12 +165,26 @@ public class GDThongKe extends JFrame{
 		mnChucNang.add(mnQLP);
 		
 		JMenu mnHTP = new JMenu("Hủy thuê phòng");
+		mnHTP.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				new GDHuyThuePhong(tenTK).setVisible(true);
+				dispose();
+			}
+		});
 		mnHTP.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		Image imgHuyThuePhong = new ImageIcon(this.getClass().getResource("/img/huythuephong.png")).getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
 		mnHTP.setIcon(new ImageIcon(imgHuyThuePhong));
 		mnChucNang.add(mnHTP);
 		
 		JMenu mnQLDV = new JMenu("Quản lý dịch vụ");
+		mnQLDV.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				new GDDichVu(tenTK).setVisible(true);
+				dispose();
+			}
+		});
 		mnQLDV.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		Image imgQLDV = new ImageIcon(this.getClass().getResource("/img/qldv.png")).getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
 		mnQLDV.setIcon(new ImageIcon(imgQLDV));
@@ -218,7 +249,10 @@ public class GDThongKe extends JFrame{
 		JLabel lblTenTaiKhoan = new JLabel("New label");
 		lblTenTaiKhoan.setForeground(Color.RED);
 		lblTenTaiKhoan.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblTenTaiKhoan.setText(tenTK);
+		ArrayList<NhanVien> listNV = nv_dao.getTenNVTheoTaiKhoan(tenTK);
+		for(NhanVien nv : listNV) {
+			lblTenTaiKhoan.setText(nv.getTenNV() + "");
+		}
 		mnChucNang.add(lblTenTaiKhoan);
 		
 		JLabel lblNewLabel_1 = new JLabel("     ");
@@ -234,7 +268,7 @@ public class GDThongKe extends JFrame{
 		lblDoiMatKhau.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDDoiMatKhau().setVisible(true);
+				new GDDoiMatKhau(tenTK).setVisible(true);
 			}
 		});
 		lblDoiMatKhau.setForeground(Color.BLUE);

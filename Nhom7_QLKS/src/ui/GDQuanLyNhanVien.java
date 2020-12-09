@@ -5,6 +5,8 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -25,6 +27,11 @@ import javax.swing.JRadioButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import com.toedter.calendar.JDateChooser;
+
+import connectDB.ConnectDB;
+import dao.TaiKhoanDao;
+import entity.NhanVien;
+
 import javax.swing.SwingConstants;
 import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
@@ -39,6 +46,7 @@ public class GDQuanLyNhanVien extends JFrame{
 	private JTextField txtSDT;
 	private JTextField txtDiaChi;
 	private JTable tableThongTinNV;
+	private TaiKhoanDao nv_dao;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -55,6 +63,15 @@ public class GDQuanLyNhanVien extends JFrame{
 	}
 
 	public GDQuanLyNhanVien(String tenTK) {
+		
+		try {
+			ConnectDB.getInstance().connect();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		nv_dao = new TaiKhoanDao();
+		
 		setTitle("Chương trình quản lý thông tin thuê phòng khách sạn Tâm Bình");
 		setBounds(100, 100, 1380, 755);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -94,6 +111,13 @@ public class GDQuanLyNhanVien extends JFrame{
 		mnChucNang.add(mnQLP);
 		
 		JMenu mnHTP = new JMenu("Hủy thuê phòng");
+		mnHTP.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				new GDHuyThuePhong(tenTK).setVisible(true);
+				dispose();
+			}
+		});
 		mnHTP.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		Image imgHuyThuePhong = new ImageIcon(this.getClass().getResource("/img/huythuephong.png")).getImage().getScaledInstance(15, 15, Image.SCALE_SMOOTH);
 		mnHTP.setIcon(new ImageIcon(imgHuyThuePhong));
@@ -171,7 +195,10 @@ public class GDQuanLyNhanVien extends JFrame{
 		JLabel lblTenTaiKhoan = new JLabel("New label");
 		lblTenTaiKhoan.setForeground(Color.RED);
 		lblTenTaiKhoan.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblTenTaiKhoan.setText(tenTK);
+		ArrayList<NhanVien> listNV = nv_dao.getTenNVTheoTaiKhoan(tenTK);
+		for(NhanVien nv : listNV) {
+			lblTenTaiKhoan.setText(nv.getTenNV() + "");
+		}
 		mnChucNang.add(lblTenTaiKhoan);
 		
 		JLabel lblNewLabel_1 = new JLabel("     ");
@@ -187,7 +214,7 @@ public class GDQuanLyNhanVien extends JFrame{
 		lblDoiMatKhau.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new GDDoiMatKhau().setVisible(true);
+				new GDDoiMatKhau(tenTK).setVisible(true);
 			}
 		});
 		lblDoiMatKhau.setForeground(Color.BLUE);
