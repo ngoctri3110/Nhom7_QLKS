@@ -3,8 +3,7 @@ package entity;
 import java.util.Date;
 
 public class PhieuThuePhong {
-	private HoaDon maHD;
-	private PhieuThuePhong maPTP;
+	private String maPTP;
 	private Date ngayThuePhong;
 	private Date ngayTraPhong;
 	private String tenKH;
@@ -12,50 +11,72 @@ public class PhieuThuePhong {
 	
 	public PhieuThuePhong() {
 	}
+	
+	
 
-	public HoaDon getMaHD() {
-		return maHD;
+	public PhieuThuePhong(String maPTP, Date ngayThuePhong, Date ngayTraPhong, String tenKH,
+			String trangThaiPhong) {
+		super();
+		this.maPTP = maPTP;
+		this.ngayThuePhong = ngayThuePhong;
+		this.ngayTraPhong = ngayTraPhong;
+		this.tenKH = tenKH;
+		this.trangThaiPhong = trangThaiPhong;
 	}
-
-	public void setMaHD(HoaDon maHD) {
-		this.maHD = maHD;
-	}
-
-	public PhieuThuePhong getMaPTP() {
+	
+	public String getMaPTP() {
 		return maPTP;
 	}
 
-	public void setMaPTP(PhieuThuePhong maPTP) {
+
+
+	public void setMaPTP(String maPTP) {
 		this.maPTP = maPTP;
 	}
+
+
 
 	public Date getNgayThuePhong() {
 		return ngayThuePhong;
 	}
 
+
+
 	public void setNgayThuePhong(Date ngayThuePhong) {
 		this.ngayThuePhong = ngayThuePhong;
 	}
+
+
 
 	public Date getNgayTraPhong() {
 		return ngayTraPhong;
 	}
 
+
+
 	public void setNgayTraPhong(Date ngayTraPhong) {
 		this.ngayTraPhong = ngayTraPhong;
 	}
+
+
 
 	public String getTenKH() {
 		return tenKH;
 	}
 
+
+
 	public void setTenKH(String tenKH) {
 		this.tenKH = tenKH;
 	}
 
+
+
 	public String getTrangThaiPhong() {
 		return trangThaiPhong;
 	}
+
+
 
 	public void setTrangThaiPhong(String trangThaiPhong) {
 		this.trangThaiPhong = trangThaiPhong;
@@ -63,7 +84,8 @@ public class PhieuThuePhong {
 
 	@Override
 	public String toString() {
-		return "PhieuThuePhong [maHD=" + maHD + ", maPTP=" + maPTP + ", ngayThuePhong=" + ngayThuePhong
-				+ ", ngayTraPhong=" + ngayTraPhong + ", tenKH=" + tenKH + ", trangThaiPhong=" + trangThaiPhong + "]";
+		return "PhieuThuePhong [maPTP=" + maPTP + ", ngayThuePhong=" + ngayThuePhong + ", ngayTraPhong=" + ngayTraPhong
+				+ ", tenKH=" + tenKH + ", trangThaiPhong=" + trangThaiPhong + "]";
 	}
+
 }

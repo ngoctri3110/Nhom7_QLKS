@@ -46,8 +46,8 @@ public class GDDangNhap extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-//					GDDangNhap window = new GDDangNhap();
-//					window.setVisible(true);
+					GDDangNhap window = new GDDangNhap();
+					window.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

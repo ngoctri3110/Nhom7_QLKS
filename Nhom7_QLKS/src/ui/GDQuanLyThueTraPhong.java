@@ -9,7 +9,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,11 +39,13 @@ import com.toedter.calendar.JDateChooser;
 
 import connectDB.ConnectDB;
 import dao.KhachHangDAO;
+import dao.PhieuThuePhongDao;
 import dao.PhongDao;
 import dao.TaiKhoanDao;
 import entity.KhachHang;
 import entity.LoaiPhong;
 import entity.NhanVien;
+import entity.PhieuThuePhong;
 import entity.Phong;
 
 public class GDQuanLyThueTraPhong extends JFrame{
@@ -52,6 +56,7 @@ public class GDQuanLyThueTraPhong extends JFrame{
 	private PhongDao phong_dao;
 	private KhachHangDAO kh_dao;
 	private JTextField txtNgayThue;
+	private PhieuThuePhongDao ptp_dao;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -78,6 +83,7 @@ public class GDQuanLyThueTraPhong extends JFrame{
 		nv_dao = new TaiKhoanDao();
 		phong_dao = new PhongDao();
 		kh_dao = new KhachHangDAO();
+		ptp_dao = new PhieuThuePhongDao();
 		
 		getContentPane().setForeground(Color.BLACK);
 		getContentPane().setFont(new Font("Tahoma", Font.BOLD, 18));
@@ -336,6 +342,11 @@ public class GDQuanLyThueTraPhong extends JFrame{
 		btnLamMoi.setFocusable(false);
 		
 		JButton btnTraPhong = new JButton("Trả phòng");
+		btnTraPhong.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new GDHoaDon(tenTK).setVisible(true);
+			}
+		});
 		btnTraPhong.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		btnTraPhong.setFocusable(false);
 		GroupLayout groupLayout = new GroupLayout(getContentPane());
@@ -924,162 +935,180 @@ public class GDQuanLyThueTraPhong extends JFrame{
 		pn101.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pn101.setBackground(Color.RED);
-				txtAreaPhongDaChon.append(" 101 ");
-				pn101.removeMouseListener(pn101.getMouseListeners()[0]);
+//				pn101.setBackground(Color.RED);
+//				txtAreaPhongDaChon.append(" 101 ");
+//				pn101.removeMouseListener(pn101.getMouseListeners()[0]);
+				txtAreaPhongDaChon.setText("101");
 			}
 		});
 		
 		pn102.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pn102.setBackground(Color.RED);
-				txtAreaPhongDaChon.append(" 102 ");
-				pn102.removeMouseListener(this);
+//				pn102.setBackground(Color.RED);
+//				txtAreaPhongDaChon.append(" 102 ");
+//				pn102.removeMouseListener(this);
+				txtAreaPhongDaChon.setText("102");
 			}
 		});
 		
 		pn103.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pn103.setBackground(Color.RED);
-				txtAreaPhongDaChon.append(" 103 ");
-				pn103.removeMouseListener(this);
+//				pn103.setBackground(Color.RED);
+//				txtAreaPhongDaChon.append(" 103 ");
+//				pn103.removeMouseListener(this);
+				txtAreaPhongDaChon.setText("103");
 			}
 		});
 		
 		pn104.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pn104.setBackground(Color.RED);
-				txtAreaPhongDaChon.append(" 104 ");
-				pn104.removeMouseListener(this);
+//				pn104.setBackground(Color.RED);
+//				txtAreaPhongDaChon.append(" 104 ");
+//				pn104.removeMouseListener(this);
+				txtAreaPhongDaChon.setText("104");
 			}
 		});
 		
 		pn105.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pn105.setBackground(Color.RED);
-				txtAreaPhongDaChon.append(" 105 ");
-				pn105.removeMouseListener(this);
+//				pn105.setBackground(Color.RED);
+//				txtAreaPhongDaChon.append(" 105 ");
+//				pn105.removeMouseListener(this);
+				txtAreaPhongDaChon.setText("105");
 			}
 		});
 		
 		pn106.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pn106.setBackground(Color.RED);
-				txtAreaPhongDaChon.append(" 106 ");
-				pn106.removeMouseListener(this);
+//				pn106.setBackground(Color.RED);
+//				txtAreaPhongDaChon.append(" 106 ");
+//				pn106.removeMouseListener(this);
+				txtAreaPhongDaChon.setText("106");
 			}
 		});
 		
 		pn201.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pn201.setBackground(Color.RED);
-				txtAreaPhongDaChon.append(" 201 ");
-				pn201.removeMouseListener(this);
+//				pn201.setBackground(Color.RED);
+//				txtAreaPhongDaChon.append(" 201 ");
+//				pn201.removeMouseListener(this);
+				txtAreaPhongDaChon.setText("201");
 			}
 		});
 		
 		pn202.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pn202.setBackground(Color.RED);
-				txtAreaPhongDaChon.append(" 202 ");
-				pn202.removeMouseListener(this);
+//				pn202.setBackground(Color.RED);
+//				txtAreaPhongDaChon.append(" 202 ");
+//				pn202.removeMouseListener(this);
+				txtAreaPhongDaChon.setText("202");
 			}
 		});
 		
 		pn203.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pn203.setBackground(Color.RED);
-				txtAreaPhongDaChon.append(" 203 ");
-				pn203.removeMouseListener(this);
+//				pn203.setBackground(Color.RED);
+//				txtAreaPhongDaChon.append(" 203 ");
+//				pn203.removeMouseListener(this);
+				txtAreaPhongDaChon.setText("203");
 			}
 		});
 		
 		pn204.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pn204.setBackground(Color.RED);
-				txtAreaPhongDaChon.append(" 204 ");
-				pn204.removeMouseListener(this);
+//				pn204.setBackground(Color.RED);
+//				txtAreaPhongDaChon.append(" 204 ");
+//				pn204.removeMouseListener(this);
+				txtAreaPhongDaChon.setText("204");
 			}
 		});
 		
 		pn205.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pn205.setBackground(Color.RED);
-				txtAreaPhongDaChon.append(" 205 ");
-				pn205.removeMouseListener(this);
+//				pn205.setBackground(Color.RED);
+//				txtAreaPhongDaChon.append(" 205 ");
+//				pn205.removeMouseListener(this);
+				txtAreaPhongDaChon.setText("205");
 			}
 		});
 		
 		pn206.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pn206.setBackground(Color.RED);
-				txtAreaPhongDaChon.append(" 206 ");
-				pn206.removeMouseListener(this);
+//				pn206.setBackground(Color.RED);
+//				txtAreaPhongDaChon.append(" 206 ");
+//				pn206.removeMouseListener(this);
+				txtAreaPhongDaChon.setText("206");
 			}
 		});
 		
 		pn301.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pn301.setBackground(Color.RED);
-				txtAreaPhongDaChon.append(" 301 ");
-				pn301.removeMouseListener(this);
+//				pn301.setBackground(Color.RED);
+//				txtAreaPhongDaChon.append(" 301 ");
+//				pn301.removeMouseListener(this);
+				txtAreaPhongDaChon.setText("301");
 			}
 		});
 		
 		pn302.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pn302.setBackground(Color.RED);
-				txtAreaPhongDaChon.append(" 302 ");
-				pn302.removeMouseListener(this);
+//				pn302.setBackground(Color.RED);
+//				txtAreaPhongDaChon.append(" 302 ");
+//				pn302.removeMouseListener(this);
+				txtAreaPhongDaChon.setText("302");
 			}
 		});
 		
 		pn303.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pn303.setBackground(Color.RED);
-				txtAreaPhongDaChon.append(" 303 ");
-				pn303.removeMouseListener(this);
+//				pn303.setBackground(Color.RED);
+//				txtAreaPhongDaChon.append(" 303 ");
+//				pn303.removeMouseListener(this);
+				txtAreaPhongDaChon.setText("303");
 			}
 		});
 		
 		pn304.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pn304.setBackground(Color.RED);
-				txtAreaPhongDaChon.append(" 304 ");
-				pn304.removeMouseListener(this);
+//				pn304.setBackground(Color.RED);
+//				txtAreaPhongDaChon.append(" 304 ");
+//				pn304.removeMouseListener(this);
+				txtAreaPhongDaChon.setText("304");
 			}
 		});
 		
 		pn305.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pn305.setBackground(Color.RED);
-				txtAreaPhongDaChon.append(" 305 ");
-				pn305.removeMouseListener(this);
+//				pn305.setBackground(Color.RED);
+//				txtAreaPhongDaChon.append(" 305 ");
+//				pn305.removeMouseListener(this);
+				txtAreaPhongDaChon.setText("305");
 			}
 		});
 		
 		pn306.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				pn306.setBackground(Color.RED);
-				txtAreaPhongDaChon.append(" 306 ");
-				pn306.removeMouseListener(this);
+//				pn306.setBackground(Color.RED);
+//				txtAreaPhongDaChon.append(" 306 ");
+//				pn306.removeMouseListener(this);
+				txtAreaPhongDaChon.setText("306");
 			}
 		});
 		
@@ -1208,8 +1237,8 @@ public class GDQuanLyThueTraPhong extends JFrame{
 		cboCMND.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				List<KhachHang> listTenKH = kh_dao.getTenKHTheoCMND(cboCMND.getSelectedItem().toString());
-				for(KhachHang kh1 : listTenKH) {
-					txtKH.setText(kh1.getTenKH());
+				for(KhachHang kh : listTenKH) {
+					txtKH.setText(kh.getTenKH());
 				}
 			}
 		});
@@ -1289,5 +1318,44 @@ public class GDQuanLyThueTraPhong extends JFrame{
 				pn306.removeMouseListener(pn306.getMouseListeners()[0]);
 			}
 		}
+		btnHoanTat.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Object o = e.getSource();
+				if(o.equals(btnHoanTat)) {
+					Phong p = new Phong();
+					p.setTinhTrangPhong("Đã thuê");
+					phong_dao.update(p, txtAreaPhongDaChon.getText());
+					TaoPhieuThuePhong();
+				}
+			}
+
+			private void TaoPhieuThuePhong() {
+				String tenKH = txtKH.getText().trim();
+				
+				int i = 1;
+				List<PhieuThuePhong> listPTP = ptp_dao.getTatCaPTP();
+				for(@SuppressWarnings("unused") PhieuThuePhong ptp : listPTP) {
+					i++;
+				}
+				String maPTP = "PTP" + i;
+				
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+				String date = sdf.format(dcNgayTraDuKien.getDate());
+				Date ngayTraPhong = Date.valueOf(date);
+				
+				Date ngayThuePhong = Date.valueOf(LocalDate.now());
+				String trangThaiPhong = "Đang thuê";
+				
+				PhieuThuePhong ptp = new PhieuThuePhong(maPTP, ngayThuePhong, ngayTraPhong, tenKH, trangThaiPhong);
+				
+				if(!ptp_dao.create(ptp))
+					JOptionPane.showMessageDialog(null, "Thuê thất bại");
+				else {
+					JOptionPane.showMessageDialog(null, "Thuê thành công");
+					new GDQuanLyThueTraPhong(tenTK).setVisible(true);
+					dispose();
+				}	
+			}
+		});
 	}
 }

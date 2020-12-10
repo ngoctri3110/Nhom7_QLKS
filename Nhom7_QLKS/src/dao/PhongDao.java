@@ -1,6 +1,7 @@
 package dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -55,5 +56,27 @@ public class PhongDao {
 			e.printStackTrace();
 		}
 		return dsKH;
+	}
+	
+	public boolean update(Phong p, String tenP) {
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement stmt = null;
+		int n = 0;
+		try {
+			stmt = con.prepareStatement("update Phong set TinhTrangPhong = ? WHERE TenPhong = " + tenP);
+			stmt.setString(1, p.getTinhTrangPhong());
+			n = stmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return n > 0;
 	}
 }

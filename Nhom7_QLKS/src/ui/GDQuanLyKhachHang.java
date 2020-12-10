@@ -538,6 +538,8 @@ public class GDQuanLyKhachHang extends JFrame implements ActionListener{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int row = tableKhachHang.getSelectedRow();
+				radGTNu.setSelected(modelKhachHang.getValueAt(row, 2).toString() == "Nữ");
+				radGTNam.setSelected(modelKhachHang.getValueAt(row, 2).toString() == "Nam");
 				try {
 					Date date = (Date) new SimpleDateFormat("yyyy-MM-dd").parse((String) modelKhachHang.getValueAt(row, 3));
 					dateChooser.setDate(date);
@@ -573,7 +575,7 @@ public class GDQuanLyKhachHang extends JFrame implements ActionListener{
 						
 						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 						String date = sdf.format(dateChooser.getDate());
-						Date ngaySinh = Date.parse(date);
+						Date ngaySinh = java.sql.Date.valueOf(date);
 						
 						boolean gt = false;
 						if(o.equals(radTimKiemGTNam))
@@ -583,7 +585,7 @@ public class GDQuanLyKhachHang extends JFrame implements ActionListener{
 						
 						List<KhachHang> listKH = kh_dao.getTatCaKH();
 						int i = 1;
-						for(KhachHang khachHang : listKH) {
+						for(@SuppressWarnings("unused") KhachHang khachHang : listKH) {
 							i++;
 						}
 						

@@ -18,6 +18,12 @@ public class Phong {
 		this.tenPhong = tenPhong;
 		this.tinhTrangPhong = tinhTrangPhong;
 	}
+	
+	public Phong(String tinhTrangPhong) {
+		super();
+		this.tinhTrangPhong = tinhTrangPhong;
+	}
+
 	public LoaiPhong getMaLoaiPhong() {
 		return maLoaiPhong;
 	}

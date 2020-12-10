@@ -10,7 +10,11 @@ public class HoaDon {
 	private Date ngayNhanPhong;
 	
 	public HoaDon() {
-		// TODO Auto-generated constructor stub
+	}
+
+	public HoaDon(String maHD) {
+		super();
+		this.maHD = maHD;
 	}
 
 	public String getMaHD() {
